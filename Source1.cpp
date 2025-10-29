@@ -1,325 +1,414 @@
 #include <iostream>
-#include <limits>
 #include "windows.h"
-
+#include <fstream> 
 using namespace std;
 
-// Функция для проверки корректности выбора
-unsigned short GetValidChoice(unsigned short minChoice, unsigned short maxChoice, const string& prompt = "") {
-    unsigned short choice;
+// Р±Р°Р·РѕРІС‹Р№ РєР»Р°СЃСЃ
+class Npc
+{
+public:
+  string name{ "РїРµСЂСЃРѕРЅР°Р¶" };
+  unsigned int health{ 10 };
+  float damage{ 5 };
+  unsigned short lvl{ 1 };
 
-    if (!prompt.empty()) {
-        cout << prompt;
+  virtual void GetInfo()
+  {
+    cout << "РРјСЏ - " << name << endl;
+    cout << "Р—РґРѕСЂРѕРІСЊРµ - " << health << endl;
+    cout << "РЈСЂРѕРЅ - " << damage << endl;
+  }
+
+  virtual void Create() {};
+
+  virtual string GetClassName() { return "Npc"; }
+};
+
+// РєР»Р°СЃСЃ Р’РѕРёРЅ
+class Warrior : public virtual Npc
+{
+protected:
+  unsigned short strenght{ 31 };
+  string weapons[4] = { "РєР°СЃС‚РµС‚", "РґСѓР±РёРЅРєР°", "РєР»РёРЅРѕРє", "РјРµС‡" };
+public:
+  Warrior()
+  {
+    name = "РІРѕРёРЅ";
+    health = 35;
+    damage = 10;
+  }
+
+  void GetWeapons()
+  {
+    cout << name << " РІР·СЏР» РІ СЂСѓРєРё " << weapons[lvl - 1] << endl;
+  }
+  void GetInfo() override
+  {
+    Npc::GetInfo();
+    cout << "РЎРёР»Р° - " << strenght << endl;
+    cout << "Р”РѕСЃС‚СѓРїРЅРѕРµ РѕСЂСѓР¶РёРµ - ";
+    for (int i = 0; i < lvl; i++)
+    {
+      cout << weapons[i] << " ";
     }
+    cout << endl;
+  }
+  void Create() override
+  {
+    cout << "Р’С‹ СЃРѕР·РґР°Р»Рё РІРѕР№РЅР°" << endl;
+    cout << "Р’РІРµРґРёС‚Рµ РёРјСЏ РїРµСЂСЃРѕРЅР°Р¶Р°\t";
+    cin >> name;
+    GetInfo();
+    GetWeapons();
+  }
 
-    while (true) {
-        cin >> choice;
+  string GetClassName() override { return "Warrior"; }
 
-        if (cin.fail() || choice < minChoice || choice > maxChoice) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Неверный выбор! Пожалуйста, введите число от " << minChoice << " до " << maxChoice << ": ";
-        }
-        else {
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            return choice;
-        }
+  bool operator == (const Warrior& warrior) const
+  {
+    return ((warrior.damage == this->damage) &&
+      (warrior.health == this->health) &&
+      (warrior.strenght == this->strenght));
+  }
+
+  ~Warrior()
+  {
+    cout << name << " РїР°Р» СЃРјРµСЂС‚СЊСЋ С…СЂР°Р±СЂС‹С…" << endl;
+  }
+};
+
+// РєР»Р°СЃСЃ Р’РѕР»С€РµР±РЅРёРє
+class Wizard : public virtual Npc
+{
+protected:
+  unsigned short intellect = 27;
+  string spell[4] = { "РІСЃРїС‹С€РєР°", "РјР°РіРёС‡РµСЃРєР°СЏ СЃС‚СЂРµР»Р°", "РѕРіРЅРµРЅРЅС‹Р№ С€Р°СЂ", "РјРµС‚РµРѕСЂРёС‚РЅС‹Р№ РґРѕР¶РґСЊ" };
+public:
+  Wizard()
+  {
+    name = "РІРѕР»С€РµР±РЅРёРє";
+    health = 23;
+    damage = 15;
+  }
+
+  void GetInfo() override
+  {
+    Npc::GetInfo();
+    cout << "РРЅС‚РµР»Р»РµРєС‚ - " << intellect << endl;
+    cout << "Р”РѕСЃС‚СѓРїРЅС‹Рµ Р·Р°РєР»РёРЅР°РЅРёСЏ РІ РєРЅРёРіРµ Р·Р°РєР»РёРЅР°РЅРёР№ - ";
+    for (int i = 0; i < lvl; i++)
+    {
+      cout << spell[i] << " ";
     }
+    cout << endl;
+  }
+  void CastSpell()
+  {
+    cout << name << " РїСЂРёРјРµРЅСЏРµС‚ " << spell[lvl - 1] << endl;
+  }
+  void Create() override
+  {
+    cout << "Р’С‹ СЃРѕР·РґР°Р»Рё РІРѕР»С€РµР±РЅРёРєР°" << endl;
+    cout << "Р’РІРµРґРёС‚Рµ РёРјСЏ РїРµСЂСЃРѕРЅР°Р¶Р°\t";
+    cin >> name;
+    GetInfo();
+    CastSpell();
+  }
+
+  string GetClassName() override { return "Wizard"; }
+
+  ~Wizard()
+  {
+    cout << name << " РёСЃРїСѓСЃС‚РёР» РґСѓС…" << endl;
+  }
+};
+
+// РєР»Р°СЃСЃ РџР°Р»Р°РґРёРЅ
+class Paladin : public Warrior, public Wizard
+{
+public:
+  Paladin()
+  {
+    name = "РїР°Р»Р°РґРёРЅ";
+    health = 25;
+    damage = 12;
+  }
+  void GetInfo() override
+  {
+    Warrior::GetInfo();
+    cout << "РРЅС‚РµР»Р»РµРєС‚ - " << intellect << endl;
+    cout << "Р”РѕСЃС‚СѓРїРЅС‹Рµ Р·Р°РєР»РёРЅР°РЅРёСЏ - ";
+    for (int i = 0; i < lvl; i++)
+    {
+      cout << spell[i] << " ";
+    }
+    cout << endl;
+  }
+  void Create() override
+  {
+    cout << "Р’С‹ СЃРѕР·РґР°Р»Рё РїР°Р»Р°РґРёРЅР°" << endl;
+    cout << "Р’РІРµРґРёС‚Рµ РёРјСЏ РїРµСЂСЃРѕРЅР°Р¶Р°\t";
+    cin >> name;
+    GetInfo();
+    CastSpell();
+    GetWeapons();
+  }
+
+  string GetClassName() override { return "Paladin"; }
+};
+
+// РєР»Р°СЃСЃ Р›СѓС‡РЅРёРє
+class Archer : public virtual Npc
+{
+protected:
+  unsigned short agility{ 35 };
+  string bows[4] = { "РєРѕСЂРѕС‚РєРёР№ Р»СѓРє", "РґР»РёРЅРЅС‹Р№ Р»СѓРє", "СЃРѕСЃС‚Р°РІРЅРѕР№ Р»СѓРє", "РјР°РіРёС‡РµСЃРєРёР№ Р»СѓРє" };
+public:
+  Archer()
+  {
+    name = "Р»СѓС‡РЅРёРє";
+    health = 28;
+    damage = 12;
+  }
+
+  void GetInfo() override
+  {
+    Npc::GetInfo();
+    cout << "Р›РѕРІРєРѕСЃС‚СЊ - " << agility << endl;
+    cout << "Р”РѕСЃС‚СѓРїРЅС‹Рµ Р»СѓРєРё - ";
+    for (int i = 0; i < lvl; i++)
+    {
+      cout << bows[i] << " ";
+    }
+    cout << endl;
+  }
+
+  void Shoot()
+  {
+    cout << name << " СЃС‚СЂРµР»СЏРµС‚ РёР· " << bows[lvl - 1] << "!" << endl;
+  }
+
+  void Create() override
+  {
+    cout << "Р’С‹ СЃРѕР·РґР°Р»Рё Р»СѓС‡РЅРёРєР°" << endl;
+    cout << "Р’РІРµРґРёС‚Рµ РёРјСЏ РїРµСЂСЃРѕРЅР°Р¶Р°\t";
+    cin >> name;
+    GetInfo();
+    Shoot();
+  }
+
+  string GetClassName() override { return "Archer"; }
+
+  ~Archer()
+  {
+    cout << name << " РІС‹РїСѓСЃС‚РёР» РїРѕСЃР»РµРґРЅСЋСЋ СЃС‚СЂРµР»Сѓ" << endl;
+  }
+};
+
+// РєР»Р°СЃСЃ Р–СЂРµС†
+class Priest : public virtual Npc
+{
+protected:
+  unsigned short wisdom{ 32 };
+  string prayers[4] = { "РјР°Р»РѕРµ РёСЃС†РµР»РµРЅРёРµ", "Р±Р»Р°РіРѕСЃР»РѕРІРµРЅРёРµ", "РёР·РіРЅР°РЅРёРµ РЅРµС‡РёСЃС‚Рё", "РІРѕСЃРєСЂРµС€РµРЅРёРµ" };
+public:
+  Priest()
+  {
+    name = "Р¶СЂРµС†";
+    health = 26;
+    damage = 8;
+  }
+
+  void GetInfo() override
+  {
+    Npc::GetInfo();
+    cout << "РњСѓРґСЂРѕСЃС‚СЊ - " << wisdom << endl;
+    cout << "Р”РѕСЃС‚СѓРїРЅС‹Рµ РјРѕР»РёС‚РІС‹ - ";
+    for (int i = 0; i < lvl; i++)
+    {
+      cout << prayers[i] << " ";
+    }
+    cout << endl;
+  }
+
+  void Pray()
+  {
+    cout << name << " С‡РёС‚Р°РµС‚ РјРѕР»РёС‚РІСѓ: " << prayers[lvl - 1] << "!" << endl;
+  }
+
+  void Create() override
+  {
+    cout << "Р’С‹ СЃРѕР·РґР°Р»Рё Р¶СЂРµС†Р°" << endl;
+    cout << "Р’РІРµРґРёС‚Рµ РёРјСЏ РїРµСЂСЃРѕРЅР°Р¶Р°\t";
+    cin >> name;
+    GetInfo();
+    Pray();
+  }
+
+  string GetClassName() override { return "Priest"; }
+
+  ~Priest()
+  {
+    cout << name << " РѕС‚РїСЂР°РІРёР»СЃСЏ Рє Р±РѕРіР°Рј" << endl;
+  }
+};
+
+// РєР»Р°СЃСЃ РРіСЂРѕРє
+class Player
+{
+public:
+  void Create(Npc* player)
+  {
+    player->Create();
+  }
+};
+
+// --- С„СѓРЅРєС†РёРё СЃРѕС…СЂР°РЅРµРЅРёСЏ Рё Р·Р°РіСЂСѓР·РєРё ---
+void SaveNpc(Npc* npc)
+{
+  ofstream save("save.txt", ios::binary);
+  if (!save.is_open())
+  {
+    cout << "РћС€РёР±РєР° СЃРѕС…СЂР°РЅРµРЅРёСЏ!\n";
+    return;
+  }
+
+  string className = npc->GetClassName();
+  size_t nameLen = npc->name.size();
+  size_t classLen = className.size();
+
+  save.write(reinterpret_cast<char*>(&classLen), sizeof(classLen));
+  save.write(className.c_str(), classLen);
+  save.write(reinterpret_cast<char*>(&nameLen), sizeof(nameLen));
+  save.write(npc->name.c_str(), nameLen);
+  save.write(reinterpret_cast<char*>(&npc->health), sizeof(npc->health));
+  save.write(reinterpret_cast<char*>(&npc->damage), sizeof(npc->damage));
+  save.write(reinterpret_cast<char*>(&npc->lvl), sizeof(npc->lvl));
+
+  cout << "вњ… РџРµСЂСЃРѕРЅР°Р¶ СЃРѕС…СЂР°РЅС‘РЅ!\n";
 }
 
-// Базовый класс
-class Npc {
-protected:
-    string name{ "персонаж" };
-    unsigned int health{ 10 };
-    float damage{ 5 };
-    unsigned short lvl{ 1 };
-public:
-    virtual void GetInfo() {
-        cout << "Имя - " << name << endl;
-        cout << "Здоровье - " << health << endl;
-        cout << "Урон - " << damage << endl;
-    }
-    virtual void Create() = 0;
-    virtual ~Npc() = default;
-};
+Npc* LoadNpc()
+{
+  ifstream load("save.txt", ios::binary);
+  if (!load.is_open())
+  {
+    cout << "вќЊ РћС€РёР±РєР° Р·Р°РіСЂСѓР·РєРё (С„Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ)\n";
+    return nullptr;
+  }
 
-// Воин
-class Warrior : public Npc {
-protected:
-    unsigned short strenght{ 31 };
-    string weapons[4] = { "кастет", "дубинка", "клинок", "меч" };
-public:
-    Warrior() {
-        name = "воин";
-        health = 35;
-        damage = 10;
-    }
+  size_t classLen, nameLen;
+  string className, name;
+  unsigned int health;
+  float damage;
+  unsigned short lvl;
 
-    void GetWeapons() {
-        cout << name << " взял в руки " << weapons[lvl - 1] << endl;
-    }
+  load.read(reinterpret_cast<char*>(&classLen), sizeof(classLen));
+  className.resize(classLen);
+  load.read(&className[0], classLen);
 
-    void GetInfo() override {
-        Npc::GetInfo();
-        cout << "Сила - " << strenght << endl;
-        cout << "Доступное оружие - ";
-        for (int i = 0; i < lvl; i++) {
-            cout << weapons[i] << " ";
-        }
-        cout << endl;
-    }
+  load.read(reinterpret_cast<char*>(&nameLen), sizeof(nameLen));
+  name.resize(nameLen);
+  load.read(&name[0], nameLen);
 
-    void Create() override {
-        cout << "Вы создали война" << endl;
-        cout << "Введите имя персонажа: ";
-        cin >> name;
-        GetInfo();
-        GetWeapons();
-    }
+  load.read(reinterpret_cast<char*>(&health), sizeof(health));
+  load.read(reinterpret_cast<char*>(&damage), sizeof(damage));
+  load.read(reinterpret_cast<char*>(&lvl), sizeof(lvl));
 
-    bool operator == (const Warrior& warrior) const {
-        return ((warrior.damage == this->damage) && (warrior.health == this->health)
-            && (warrior.strenght == this->strenght));
-    }
+  Npc* npc = nullptr;
+  if (className == "Warrior") npc = new Warrior();
+  else if (className == "Wizard") npc = new Wizard();
+  else if (className == "Paladin") npc = new Paladin();
+  else if (className == "Archer") npc = new Archer();
+  else if (className == "Priest") npc = new Priest();
+  else npc = new Npc();
 
-    ~Warrior() override {
-        cout << name << " пал смертью храбрых" << endl;
-    }
-};
+  npc->name = name;
+  npc->health = health;
+  npc->damage = damage;
+  npc->lvl = lvl;
 
-// Волшебник
-class Wizard : public Npc {
-protected:
-    unsigned short intellect = 27;
-    string spell[4] = { "вспышка", "магическая стрела", "огненный шар", "метеоритный дождь" };
-public:
-    Wizard() {
-        name = "волшебник";
-        health = 23;
-        damage = 15;
-    }
+  cout << "вњ… РџРµСЂСЃРѕРЅР°Р¶ СѓСЃРїРµС€РЅРѕ Р·Р°РіСЂСѓР¶РµРЅ: " << npc->GetClassName() << endl;
+  npc->GetInfo();
+  return npc;
+}
 
-    void GetInfo() override {
-        Npc::GetInfo();
-        cout << "Интеллект - " << intellect << endl;
-        cout << "Доступные заклинания - ";
-        for (int i = 0; i < lvl; i++) {
-            cout << spell[i] << " ";
-        }
-        cout << endl;
-    }
+int main()
+{
+  setlocale(LC_ALL, "Rus");
+  SetConsoleCP(1251);
+  SetConsoleOutputCP(1251);
 
-    void CastSpell() {
-        cout << name << " применяет " << spell[lvl - 1] << endl;
+  Warrior warrior;
+  Wizard wizard;
+  Paladin paladin;
+  Archer archer;
+  Priest priest;
+  Player player;
+
+  cout << "РџСЂРёРІРµС‚, РїСѓС‚РЅРёРє\nРџСЂРёСЃСЏРґСЊ Сѓ РєРѕСЃС‚СЂР° Рё СЂР°СЃСЃРєР°Р¶Рё Рѕ СЃРµР±Рµ\n";
+  cout << "РўС‹ РІРїРµСЂРІС‹Рµ С‚СѓС‚? (1 - РЅРѕРІС‹Р№ РїРµСЂСЃРѕРЅР°Р¶, 2 - Р·Р°РіСЂСѓР·РёС‚СЊ)\n";
+
+  unsigned short choise = 1;
+  cin >> choise;
+  while (choise > 2 || choise < 1)
+  {
+    cout << "РќР°РІРµСЂРЅРѕРµ С‚С‹ РѕС€РёР±СЃСЏ, РїРѕРІС‚РѕСЂРё СЃРЅРѕРІР°\n";
+    cin >> choise;
+  }
+
+  Npc* current = nullptr;
+
+  if (choise == 1)
+  {
+    cout << "Р Р°СЃСЃРєР°Р¶Рё Рѕ СЃРІРѕРёС… РЅР°РІС‹РєР°С…\n";
+    cout << "\t1 - Р’РѕРёРЅ\n\t2 - Р’РѕР»С€РµР±РЅРёРє\n\t3 - РџР°Р»Р°РґРёРЅ\n\t4 - Р›СѓС‡РЅРёРє\n\t5 - Р–СЂРµС†\n";
+    cin >> choise;
+    while (choise > 5 || choise < 1)
+    {
+      cout << "РўР°РєРѕРіРѕ РµС‰Рµ РЅРµ Р±С‹Р»Рѕ РІ РЅР°С€РёС… РєСЂР°СЏС…\nРќРµ РјРѕРі Р±С‹ С‚С‹ РїРѕРІС‚РѕСЂРёС‚СЊ\n";
+      cin >> choise;
     }
 
-    void Create() override {
-        cout << "Вы создали волшебника" << endl;
-        cout << "Введите имя персонажа: ";
-        cin >> name;
-        GetInfo();
-        CastSpell();
+    switch (choise)
+    {
+    case 1:
+      player.Create(&warrior);
+      current = &warrior;
+      break;
+    case 2:
+      player.Create(&wizard);
+      current = &wizard;
+      break;
+    case 3:
+      player.Create(&paladin);
+      current = &paladin;
+      break;
+    case 4:
+      player.Create(&archer);
+      current = &archer;
+      break;
+    case 5:
+      player.Create(&priest);
+      current = &priest;
+      break;
     }
+  }
+  else
+  {
+    current = LoadNpc();
+  }
 
-    ~Wizard() override {
-        cout << name << " испустил дух" << endl;
+  if (current != nullptr)
+  {
+    cout << "\nРЎРґРµР»Р°РµРј РѕСЃС‚Р°РЅРѕРІРєСѓ С‚СѓС‚?\n\t1 - СЃРѕС…СЂР°РЅРёС‚СЊ РёРіСЂСѓ\n\t2 - РІС‹Р№С‚Рё Р±РµР· СЃРѕС…СЂР°РЅРµРЅРёСЏ\n";
+    cin >> choise;
+    if (choise == 1)
+    {
+      SaveNpc(current);
     }
-};
+  }
 
-// Лучник
-class Archer : public Npc {
-protected:
-    unsigned short agility{ 35 };
-    string bows[4] = { "короткий лук", "длинный лук", "составной лук", "магический лук" };
-public:
-    Archer() {
-        name = "лучник";
-        health = 28;
-        damage = 12;
-    }
-
-    void GetInfo() override {
-        Npc::GetInfo();
-        cout << "Ловкость - " << agility << endl;
-        cout << "Доступные луки - ";
-        for (int i = 0; i < lvl; i++) {
-            cout << bows[i] << " ";
-        }
-        cout << endl;
-    }
-
-    void Shoot() {
-        cout << name << " стреляет из " << bows[lvl - 1] << "!" << endl;
-    }
-
-    void Create() override {
-        cout << "Вы создали лучника" << endl;
-        cout << "Введите имя персонажа: ";
-        cin >> name;
-        GetInfo();
-        Shoot();
-    }
-
-    ~Archer() override {
-        cout << name << " выпустил последнюю стрелу" << endl;
-    }
-};
-
-// Жрец
-class Priest : public Npc {
-protected:
-    unsigned short wisdom{ 32 };
-    string prayers[4] = { "малое исцеление", "благословение", "изгнание нечисти", "воскрешение" };
-public:
-    Priest() {
-        name = "жрец";
-        health = 26;
-        damage = 8;
-    }
-
-    void GetInfo() override {
-        Npc::GetInfo();
-        cout << "Мудрость - " << wisdom << endl;
-        cout << "Доступные молитвы - ";
-        for (int i = 0; i < lvl; i++) {
-            cout << prayers[i] << " ";
-        }
-        cout << endl;
-    }
-
-    void Pray() {
-        cout << name << " читает молитву: " << prayers[lvl - 1] << "!" << endl;
-    }
-
-    void Create() override {
-        cout << "Вы создали жреца" << endl;
-        cout << "Введите имя персонажа: ";
-        cin >> name;
-        GetInfo();
-        Pray();
-    }
-
-    ~Priest() override {
-        cout << name << " отправился к богам" << endl;
-    }
-};
-
-// Паладин
-class Paladin : public Warrior, public Wizard {
-public:
-    Paladin() {
-        name = "паладин";
-        health = 25;
-        damage = 12;
-        strenght = 27;
-    }
-
-    void GetInfo() override {
-        Warrior::GetInfo();
-        cout << "Интеллект - " << intellect << endl;
-        cout << "Доступные заклинания - ";
-        for (int i = 0; i < lvl; i++) {
-            cout << spell[i] << " ";
-        }
-        cout << endl;
-    }
-
-    void Create() override {
-        cout << "Вы создали паладина" << endl;
-        cout << "Введите имя персонажа: ";
-        cin >> name;
-        GetInfo();
-        CastSpell();
-        GetWeapons();
-    }
-
-    ~Paladin() override {
-        cout << name << " пал в бою за свет" << endl;
-    }
-};
-
-// Игрок
-class Player {
-public:
-    void Create(Npc* player) {
-        player->Create();
-    }
-};
-
-int main() {
-    setlocale(LC_ALL, "Rus");
-    SetConsoleCP(1251);
-    SetConsoleOutputCP(1251);
-
-    Warrior* warrior = new Warrior();
-    Warrior* warrior2 = new Warrior();
-    cout << "Сравнение воинов: " << (*warrior == *warrior2) << endl;
-
-    Wizard* wizard = new Wizard();
-    Paladin* paladin = new Paladin();
-    Archer* archer = new Archer();
-    Priest* priest = new Priest();
-    Player* player = new Player();
-
-    cout << "Привет, путник! Присядь у костра и расскажи о себе\n";
-
-    unsigned short choice = GetValidChoice(1, 2, "Ты впервые тут? (1 - новый персонаж, 2 - загрузить)\n");
-
-    if (choice == 1) {
-        cout << "Выбери класс:\n";
-        cout << "1 - Воин\n2 - Волшебник\n3 - Паладин\n4 - Лучник\n5 - Жрец\n";
-        cout << "Твой выбор: ";
-
-        choice = GetValidChoice(1, 5);
-
-        switch (choice) {
-        case 1:
-            player->Create(warrior);
-            delete wizard;
-            delete paladin;
-            delete archer;
-            delete priest;
-            break;
-        case 2:
-            player->Create(wizard);
-            delete warrior;
-            delete paladin;
-            delete archer;
-            delete priest;
-            break;
-        case 3:
-            player->Create(paladin);
-            delete warrior;
-            delete wizard;
-            delete archer;
-            delete priest;
-            break;
-        case 4:
-            player->Create(archer);
-            delete warrior;
-            delete wizard;
-            delete paladin;
-            delete priest;
-            break;
-        case 5:
-            player->Create(priest);
-            delete warrior;
-            delete wizard;
-            delete paladin;
-            delete archer;
-            break;
-        }
-    }
-    else {
-        cout << "Функция загрузки пока не реализована..." << endl;
-        delete warrior;
-        delete wizard;
-        delete paladin;
-        delete archer;
-        delete priest;
-    }
-
-    delete player;
-    return 0;
+  cout << "\nР”Рѕ РЅРѕРІС‹С… РІСЃС‚СЂРµС‡, РіРµСЂРѕР№!\n";
+  return 0;
 }
