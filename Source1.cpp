@@ -7,7 +7,27 @@ using namespace std;
 
 enum class ValueQuality
 {
-    мусор, редкое, мифическое, легендарное//эквивалент перечислению чисел
+    мусор, редкое,обычное, мифическое, легендарное//эквивалент перечислению чисел
+};
+
+enum class ValueCharachers
+{
+    Воин, Лучник, Маг, Жнец//эквивалент перечислению чисел
+};
+
+enum class ValueMainMenu
+{
+    Начатьсначала, Загрузить//эквивалент перечислению чисел
+};
+
+enum class ValueWeapon
+{
+   кастет, дубинка, клинок, меч,короткийлук, длинныйлук, составнойлук, магическийлук//эквивалент перечислению чисел
+};
+
+enum class ValueSpells
+{
+    вспышка, магическаястрела, огненныйшар, метеоритныйдождь //эквивалент перечислению чисел
 };
 
 struct Treasure//всё по умолчанию внутри public
@@ -37,6 +57,7 @@ struct Treasure//всё по умолчанию внутри public
         default:
             break;
         }
+
 
         struct Treasure//все по умолчанию внутри public
         {
@@ -356,10 +377,13 @@ struct Treasure//всё по умолчанию внутри public
         // класс Игрок
         class Player
         {
+        private:
+            unique_ptr<Npc> currentCharacter;
         public:
-            void Create(Npc* player)
+            void Create(unique_ptr<Npc> player)
             {
-                player->Create();
+                currentCharacter = move(player);
+                currentCharacter->Create();
             }
         };
 
@@ -546,3 +570,4 @@ struct Treasure//всё по умолчанию внутри public
             cout << "\nДо новых встреч, герой!\n";
             return 0;
         }
+
