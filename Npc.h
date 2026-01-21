@@ -20,15 +20,14 @@ public:
 
     virtual void Create()
     {
-        // базовый NPC ничего не создаёт
     }
 
     virtual void GetInfo()
     {
-        std::cout << "Имя: " << name << std::endl;
-        std::cout << "Здоровье: " << health << std::endl;
-        std::cout << "Урон: " << damage << std::endl;
-        std::cout << "Уровень: " << lvl << std::endl;
+        std::cout << "Г€Г¬Гї: " << name << std::endl;
+        std::cout << "Г‡Г¤Г®Г°Г®ГўГјГҐ: " << health << std::endl;
+        std::cout << "Г“Г°Г®Г­: " << damage << std::endl;
+        std::cout << "Г“Г°Г®ГўГҐГ­Гј: " << lvl << std::endl;
     }
 
     virtual std::string GetClassName()
@@ -38,3 +37,4 @@ public:
 
     virtual ~Npc() {}
 };
+
