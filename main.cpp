@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <cstdlib>
 #include <ctime>
 
@@ -92,8 +92,8 @@ int main()
     cout << "Текущее здоровье: " << player->health << endl;
 
 
-    Evil enemy1("Визаж", 15, 6);
-    Evil enemy2("Огр-Маги", 20, 10);
+    Evil enemy1("Визаж", 15,3, 6);
+    Evil enemy2("Огр-Маги", 20,5, 10);
 
     Evil* enemies[2] = { &enemy1, &enemy2 };
 
@@ -138,10 +138,46 @@ int main()
 
     if (player->health > 0)
     {
+        int loot = rand() % 4;
         Treasure treasure(ValueQuality::редкое);
-        treasure.name = "Vanguard";
-        cout << "\nТы нашёл сокровище!\n";
-        treasure.ShowInfo();
+
+        cout << "\nТы нашёл предмет!\n";
+
+        if (loot == 0)
+        {
+            treasure.name = "Vanguard";
+            treasure.ShowInfo();
+
+            player->armor += 5;
+            cout << "Броня увеличена на 5!\n";
+        }
+        else if (loot == 1)
+        {
+            treasure.name = "Blink Dagger";
+            treasure.ShowInfo();
+
+            cout << "Это просто блинк -_-.\n";
+        }
+        else if (loot == 2)
+        {
+            treasure.name = "Black King Bar";
+            treasure.ShowInfo();
+
+            player->damage += 5;
+            player->armor += 5;
+            cout << "Урон +5 и броня +5!\n";
+        }
+        else
+        {
+            treasure.name = "Phase Boots";
+            treasure.ShowInfo();
+
+            player->damage += 2;
+            cout << "Урон увеличен на 2!\n";
+        }
+
+        cout << "Твой текущий урон: " << player->damage << endl;
+        cout << "Твоя текущая броня: " << player->armor << endl;
     }
 
     cout << "\n=== Конец катки ===\n";
