@@ -5,6 +5,7 @@ class Lina : public Npc
 {
 public:
     std::string spells[3];
+    int intelligence;
 
     Lina();
     void Create();
