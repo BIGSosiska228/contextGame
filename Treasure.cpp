@@ -8,5 +8,5 @@ Treasure::Treasure(ValueQuality q)
 
 void Treasure::ShowInfo()
 {
-    std::cout << "Ñîêðîâèùå: " << name << std::endl;
+    std::cout << "Ð¡Ð¾ÐºÑ€Ð¾Ð²Ð¸Ñ‰Ðµ: " << name << std::endl;
 }
