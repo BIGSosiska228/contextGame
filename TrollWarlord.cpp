@@ -3,26 +3,29 @@
 
 TrollWarlord::TrollWarlord()
 {
-    name = "Троль Варлорд";
+    name = "РўСЂРѕР»СЊ Р’Р°СЂР»РѕСЂРґ";
     health = 35;
     damage = 10;
+    armor = 7;
     lvl = 1;
     strength = 30;
 
-    weapons[0] = "топоры(дальний бой)";
-    weapons[1] = "топоры(ближний бой)";
-    weapons[2] = "ярость войны";
-    weapons[3] = "Батл транс";
+    weapons[0] = "С‚РѕРїРѕСЂС‹ (РґР°Р»СЊРЅРёР№ Р±РѕР№)";
+    weapons[1] = "С‚РѕРїРѕСЂС‹ (Р±Р»РёР¶РЅРёР№ Р±РѕР№)";
+    weapons[2] = "СЏСЂРѕСЃС‚СЊ РІРѕР№РЅС‹";
+    weapons[3] = "Р‘Р°С‚Р» С‚СЂР°РЅСЃ";
 }
 
 void TrollWarlord::Create()
 {
-    std::cout << "Введите имя Troll Warlord: ";
+    std::cout << "Р’РІРµРґРёС‚Рµ РёРјСЏ Troll Warlord: ";
     std::cin >> name;
+
+    Npc::Create();
 }
 
 void TrollWarlord::GetInfo()
 {
     Npc::GetInfo();
-    std::cout << "Сила: " << strength << std::endl;
+    std::cout << "РЎРёР»Р°: " << strength << std::endl;
 }
