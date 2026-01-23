@@ -3,17 +3,26 @@
 
 AntiMage::AntiMage()
 {
-    name = "Анти маг";
-    health = 40;
+    name = "РђРЅС‚Рё РјР°Рі";
+    health = 25;
     damage = 8;
+    armor = 1;
     lvl = 1;
+    agility = 26;
 
-    abilities[0] = "Мана берн";
-    abilities[1] = "Мана войд";
+    abilities[0] = "РњР°РЅР° Р±СЂРµР№Рє";
+    abilities[1] = "РњР°РЅР° РІРѕР№Рґ";
 }
 
 void AntiMage::Create()
 {
-    std::cout << "Введите имя Anti mage: ";
+    std::cout << "Р’РІРµРґРёС‚Рµ РёРјСЏ Anti mage: ";
     std::cin >> name;
+    Npc::Create();
 }
+void AntiMage::GetInfo()
+{
+    Npc::GetInfo();
+    std::cout << "Р›РѕРІРєРѕСЃС‚СЊ: " << agility << std::endl;
+}
+
