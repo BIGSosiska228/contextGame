@@ -3,23 +3,27 @@
 
 Lina::Lina()
 {
-    name = "Лина";
-    health = 25;
+    name = "Р›РёРЅР°";
+    health = 26;
     damage = 12;
+    armor = 3;
     lvl = 1;
+    intelligence = 21;
 
-    spells[0] = "Драгон слейв";
-    spells[1] = "Лайт страйк";
-    spells[2] = "Лагуна";
+    spells[0] = "Р”СЂР°РіРѕРЅ СЃР»РµР№РІ";
+    spells[1] = "Р›Р°Р№С‚ СЃС‚СЂР°Р№Рє";
+    spells[2] = "Р›Р°РіСѓРЅР°";
 }
 
 void Lina::Create()
 {
-    std::cout << "Введите имя Lina: ";
+    std::cout << "Р’РІРµРґРёС‚Рµ РёРјСЏ Lina: ";
     std::cin >> name;
+    Npc::Create();
 }
 
 void Lina::GetInfo()
 {
     Npc::GetInfo();
+    std::cout << "РРЅС‚РµР»Р»РµРєС‚: " << intelligence << std::endl;
 }
