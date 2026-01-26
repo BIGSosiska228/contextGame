@@ -206,8 +206,8 @@ int main()
             player->damage += 2;
         }
 
-        cout << "Урон: " << player->damage << endl;
-        cout << "Броня: " << player->armor << endl;
+        cout << "Теперь твой урон: " << player->damage << endl;
+        cout << "Теперь твоя броня: " << player->armor << endl;
     }
     if (player->health > 0)
         cout << "Ты выиграл соло катку.\n";
@@ -218,4 +218,3 @@ int main()
     delete player;
     return 0;
 }
-
