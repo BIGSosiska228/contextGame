@@ -12,10 +12,21 @@ enum ValueQuality
 
 class Treasure
 {
-public:
+private:
     std::string name;
     ValueQuality quality;
 
+public:
     Treasure(ValueQuality q);
-    void ShowInfo();
+
+
+    void ShowInfo() const;
+
+
+    std::string GetName() const { return name; }
+    ValueQuality GetQuality() const { return quality; }
+
+
+    void SetName(const std::string& n) { name = n; }
+    void SetQuality(ValueQuality q) { quality = q; }
 };
