@@ -9,16 +9,16 @@
 #include "Treasure.h"
 #include "Evil.h"
 
-using namespace std;
 
-unsigned short TestChoise(unsigned short maxChoise, string text)
+
+unsigned short TestChoise(unsigned short maxChoise, std::string text)
 {
     unsigned short choise;
-    cin >> choise;
+    std::cin >> choise;
     while (choise < 1 || choise > maxChoise)
     {
-        cout << text << endl;
-        cin >> choise;
+        std::cout << text << std::endl;
+        std::cin >> choise;
     }
     return choise;
 }
@@ -28,67 +28,71 @@ int main()
     setlocale(LC_ALL, "Rus");
     srand(time(0));
 
-    cout << "=== Добро пожаловать в мир Dota 2 ===\n";
+    std::cout << "=== Добро пожаловать в мир Dota 2 ===\n";
 
-    cout << "Выбери мир:\n1 - Сила света\n2 - Сила тьмы\n";
+    std::cout << "Выбери мир:\n1 - Сила света\n2 - Сила тьмы\n";
     int world = TestChoise(2, "Ошибка! Выбери 1 или 2.");
 
     if (world == 1)
-        cout << "Ты отправляешься за силу света.\n";
+        std::cout << "Ты отправляешься за силу света.\n";
     else
-        cout << "Ты отправляешься за силу тьмы.\n";
-    cout << "Древние начали войну.\n";
-    cout << "Твоя цель — прорваться через врагов\n";
-    cout << "и доказать силу выбранной стороны.\n";
+        std::cout << "Ты отправляешься за силу тьмы.\n";
+
+    std::cout << "Древние начали войну.\n";
+    std::cout << "Твоя цель — прорваться через врагов\n";
+    std::cout << "и доказать силу выбранной стороны.\n";
 
     int lore = rand() % 3;
     if (world == 1)
     {
-        if (lore == 0) cout << "В Dota настали не лучшие времена.\n";
-        else if (lore == 1) cout << "Во имя сил света!\n";
-        else cout << "Древние зовут — последуй за ними.\n";
+        if (lore == 0)std::cout << "В Dota настали не лучшие времена.\n";
+        else if (lore == 1)std::cout << "Во имя сил света!\n";
+        else std::cout << "Древние зовут — последуй за ними.\n";
     }
     else
     {
-        if (lore == 0) cout << "Тьма поглотит этот мир!\n";
-        else if (lore == 1) cout << "Сила тьмы ведет нас к победе!\n";
-        else cout << "Страх — наше лучшее оружие!\n";
+        if (lore == 0) std::cout << "Тьма поглотит этот мир!\n";
+        else if (lore == 1) std::cout << "Сила тьмы ведет нас к победе!\n";
+        else std::cout << "Страх — наше лучшее оружие!\n";
     }
 
-    cout << "\nВыбери героя:\n1 - Троль Варлорд\n2 - Лина\n3 - Антимаг\n";
+    std::cout << "\nВыбери героя:\n1 - Троль Варлорд\n2 - Лина\n3 - Антимаг\n";
     int hero = TestChoise(3, "Такого героя нет.");
+
 
     Npc* player = nullptr;
     if (hero == 1) player = new TrollWarlord();
     else if (hero == 2) player = new Lina();
     else player = new AntiMage();
 
+ 
     player->Create();
     player->GetInfo();
 
-    cout << "\n--- Катка начинается ---\n";
+    std::cout << "\n--- Катка начинается ---\n";
 
+ 
     int eventChance = rand() % 4;
-    if (eventChance == 0)
+    switch (eventChance)
     {
-        cout << "Тебя атакует малый кемп. -5 HP.\n";
-        player->health -= 5;
-    }
-    else if (eventChance == 1)
-    {
-        cout << "Ты отдохнул на фонтане. +5 HP.\n";
-        player->health += 5;
-    }
-    else if (eventChance == 2)
-    {
-        cout << "Ты встретил торговца, который рассказал легенду.\n";
-    }
-    else
-    {
-        cout << "Путь был спокойным.\n";
+    case 0:
+        std::cout << "Тебя атакует малый кемп. -5 HP.\n";
+        player->TakeDamage(5);
+        break;
+    case 1:
+        std::cout << "Ты отдохнул на фонтане. +5 HP.\n";
+        player->Heal(5);
+        break;
+    case 2:
+        std::cout << "Ты встретил торговца, который рассказал легенду.\n";
+        break;
+    case 3:
+        std::cout << "Путь был спокойным.\n";
+        break;
     }
 
-    cout << "Текущее здоровье: " << player->health << "/" << player->maxHealth << endl;
+    std::cout << "Текущее здоровье: " << player->GetHealth() << "/" << player->GetMaxHealth() << std::endl;
+
 
     Evil enemy1("Визаж", 15, 3, 6);
     Evil enemy2("Огр-Маги", 20, 5, 10);
@@ -96,124 +100,116 @@ int main()
 
     for (int i = 0; i < 2; i++)
     {
-        cout << "\n=== Появился враг: " << enemies[i]->name << " ===\n";
+        std::cout << "\n=== Появился враг: " << enemies[i]->GetName() << " ===\n";
         enemies[i]->GetInfo();
-        cout << "Враги преграждают тебе путь к древним...\n";
+        std::cout << "Враги преграждают тебе путь к древним...\n";
 
-        while (enemies[i]->health > 0 && player->health > 0)
+        while (enemies[i]->GetHealth() > 0 && player->GetHealth() > 0)
         {
-            cout << "\nВыбери действие:\n";
-            cout << "1 - Атаковать\n";
-            cout << "2 - Использовать фласку (" << player->potions << ")\n";
+            std::cout << "\nВыбери действие:\n";
+            std::cout << "1 - Атаковать\n";
+            std::cout << "2 - Использовать фласку (" << player->GetPotions() << ")\n";
 
             int action = TestChoise(2, "Выбери 1 или 2");
 
             if (action == 1)
             {
-                cout << "Ты атакуешь!\n";
-                enemies[i]->health -= player->damage;
-                if (enemies[i]->health < 0)
-                    enemies[i]->health = 0;
-                cout << enemies[i]->name << " здоровье: "
-                    << enemies[i]->health << std::endl;
+                std::cout << "Ты атакуешь!\n";
+                enemies[i]->TakeDamage(player->GetDamage());
+                std::cout << enemies[i]->GetName() << " здоровье: " << enemies[i]->GetHealth() << std::endl;
             }
             else
             {
                 if (player->UsePotion())
-                    cout << "Ты похилил себя флаской и восстановил здоровье!\n";
+                    std::cout << "Ты похилил себя флаской и восстановил здоровье!\n";
                 else
-                    cout << "Зелье использовать нельзя!\n";
+                    std::cout << "Зелье использовать нельзя!\n";
             }
 
-            if (enemies[i]->health <= 0)
+            if (enemies[i]->GetHealth() <= 0)
             {
-                cout << "Ты убил " << enemies[i]->name << "!\n";
-                int talk = rand() % 3;
-                if (talk == 0) cout << "Еще один пал.\n";
-                else if (talk == 1) cout << "Слабак.\n";
-                else cout << "Следующий!\n";
+                std::cout << "Ты убил " << enemies[i]->GetName() << "!\n";
                 break;
             }
 
-            cout << enemies[i]->name << " атакует тебя!\n";
-            player->health -= enemies[i]->damage;
-            cout << "Твое здоровье: " << player->health << "/" << player->maxHealth << endl;
+            std::cout << enemies[i]->GetName() << " атакует тебя!\n";
+            player->TakeDamage(enemies[i]->GetDamage());
+            std::cout << "Твое здоровье: " << player->GetHealth() << "/" << player->GetMaxHealth() << std::endl;
 
-            if (player->health <= 0)
+            if (player->GetHealth() <= 0)
             {
-                cout << "Ты погиб...\n";
+                std::cout << "Ты погиб...\n";
                 break;
             }
-
         }
-
-        if (player->health <= 0)
-            break;
-
-     
-        if (i == 0 && player->health > 0)
+        if (i == 0 && player->GetHealth() > 0) 
         {
-            cout << "\nКоманда жестко фидит...\n";
-            cout << "Что будешь делать?\n";
-            cout << "1 - Сломать шмотки и ливнуть\n";
-            cout << "2 - Соло пробовать затащить\n";
+            std::cout << "\nКоманда жестко фидит...\n";
+            std::cout << "Что будешь делать?\n";
+            std::cout << "1 - Сломать шмотки и ливнуть\n";
+            std::cout << "2 - Попробовать соло тащить катку\n";
 
             int choice = TestChoise(2, "Выбери 1 или 2.");
 
             if (choice == 1)
             {
-                cout << "\nТы сломал шмотки и написал GG.\n";
-                cout << "Катка закончена.\n";
-                return 0;
+                std::cout << "\nТы сломал шмотки и написал GG.\n";
+                std::cout << "Катка закончена.\n";
+                return 0; 
             }
             else
             {
-                cout << "\nТы решил соло тащить катку!\n";
-                cout << "Появляется сильный враг...\n";
-
+                std::cout << "\nТы решил соло тащить катку!\n";
+                std::cout << "Появляется сильный враг...\n";
+             
             }
         }
+
+        if (player->GetHealth() <= 0)
+            break; 
     }
 
-    if (player->health > 0)
+
+    if (player->GetHealth() > 0)
     {
         Treasure treasure(ValueQuality::редкое);
-        cout << "\nТы нашёл предмет!\n";
+        std::cout << "\nТы нашёл предмет!\n";
 
         int loot = rand() % 4;
-        if (loot == 0)
+        switch (loot)
         {
-            treasure.name = "Vanguard";
+        case 0:
+            treasure.SetName("Vanguard");
             treasure.ShowInfo();
-            player->armor += 5;
-        }
-        else if (loot == 1)
-        {
-            treasure.name = "Blink Dagger";
+            player->AddArmor(5);
+            break;
+        case 1:
+            treasure.SetName("Blink Dagger");
             treasure.ShowInfo();
-        }
-        else if (loot == 2)
-        {
-            treasure.name = "Black King Bar";
+            break;
+        case 2:
+            treasure.SetName("Black King Bar");
             treasure.ShowInfo();
-            player->damage += 5;
-            player->armor += 5;
-        }
-        else
-        {
-            treasure.name = "Phase Boots";
+            player->AddDamage(5);
+            player->AddArmor(5);
+            break;
+        case 3:
+            treasure.SetName("Phase Boots");
             treasure.ShowInfo();
-            player->damage += 2;
+            player->AddDamage(2);
+            break;
         }
 
-        cout << "Теперь твой урон: " << player->damage << endl;
-        cout << "Теперь твоя броня: " << player->armor << endl;
+        std::cout << "Теперь твой урон: " << player->GetDamage() << std::endl;
+        std::cout << "Теперь твоя броня: " << player->GetArmor() << std::endl;
     }
-    if (player->health > 0)
-        cout << "Ты выиграл соло катку.\n";
+
+    if (player->GetHealth() > 0)
+        std::cout << "Ты выиграл соло катку.\n";
     else
-        cout << "Твоя попытка провалилась, но катка еще продолжается...\n";
-    cout << "\n=== Трон упал ===\n";
+        std::cout << "Твоя попытка провалилась, но катка еще продолжается...\n";
+
+    std::cout << "\n=== Трон упал ===\n";
 
     delete player;
     return 0;
