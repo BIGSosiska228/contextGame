@@ -4,13 +4,19 @@
 #include <iostream>
 
 class Player {
-public:
-    std::unique_ptr<Npc> character;
+private:
+    std::unique_ptr<Npc> character;  
 
-    void Create(std::unique_ptr<Npc> npc) { 
+public:
+
+    void Create(std::unique_ptr<Npc> npc) {
         character = std::move(npc);
         if (character) character->GetInfo();
     }
 
-    Npc* GetCurrentCharacter() { return character.get(); }
+ 
+    Npc* GetCurrentCharacter() const { return character.get(); }
+
+  
+    bool HasCharacter() const { return character != nullptr; }
 };
