@@ -3,11 +3,11 @@
 
 TrollWarlord::TrollWarlord()
 {
-    name = "Троль Варлорд";
-    health = 35;
-    damage = 10;
-    armor = 7;
-    lvl = 1;
+    SetName("Троль Варлорд");
+    AddDamage(10);
+    AddArmor(2);
+    
+
     strength = 30;
 
     weapons[0] = "топоры (дальний бой)";
@@ -16,16 +16,20 @@ TrollWarlord::TrollWarlord()
     weapons[3] = "Батл транс";
 }
 
+
 void TrollWarlord::Create()
 {
     std::cout << "Введите имя Troll Warlord: ";
-    std::cin >> name;
-
-    Npc::Create();
+    std::string inputName;
+    std::cin >> inputName;
+    SetName(inputName); 
+    SetHealth(32);
+    Npc::Create();      
 }
 
-void TrollWarlord::GetInfo()
+
+void TrollWarlord::GetInfo() const
 {
-    Npc::GetInfo();
+    Npc::GetInfo();   
     std::cout << "Сила: " << strength << std::endl;
 }
