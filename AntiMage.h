@@ -1,13 +1,33 @@
 #pragma once
 #include "Npc.h"
+#include <string>
 
 class AntiMage : public Npc
 {
-public:
+private:
     std::string abilities[2];
     int agility;
 
+public:
     AntiMage();
-    void Create();
-    void GetInfo();
+
+ 
+    void Create() override;
+    void GetInfo() const override;
+
+
+    int GetAgility() const { return agility; }
+    std::string GetAbility(int index) const
+    {
+        if (index < 0 || index > 1) return "";
+        return abilities[index];
+    }
+
+
+    void SetAgility(int a) { agility = a; }
+    void SetAbility(int index, const std::string& ability)
+    {
+        if (index < 0 || index > 1) return;
+        abilities[index] = ability;
+    }
 };
