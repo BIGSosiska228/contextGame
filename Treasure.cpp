@@ -6,7 +6,7 @@ Treasure::Treasure(ValueQuality q)
     quality = q;
 }
 
-void Treasure::ShowInfo()
+void Treasure::ShowInfo() const
 {
     std::cout << "Сокровище: " << name << std::endl;
 }
