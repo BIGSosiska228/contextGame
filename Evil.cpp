@@ -1,11 +1,15 @@
 #include "Evil.h"
 
-Evil::Evil(std::string n, int h,int j, int d)
+Evil::Evil(std::string n, int h, int a, int d)
 {
-    name = n;
-    health = h;
-    maxHealth = h;
-    armor = j;
-    damage = d;
-    lvl = 1;
+    SetName(n);
+
+
+    TakeDamage(0);   
+    Heal(h);    
+
+
+
+    AddDamage(d);
+    AddArmor(a);
 }
