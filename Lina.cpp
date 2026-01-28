@@ -1,34 +1,32 @@
-#include "Lina.h"
-#include <iostream>
+#pragma once
+#include "Npc.h"
+#include <string>
 
-Lina::Lina()
+class Lina : public Npc
 {
-    SetName("Лина");
-    AddDamage(12);
-    AddArmor(3);
-    
+private:
+    std::string spells[3];
+    int intelligence;
 
-    intelligence = 21;
+public:
+    Lina();
 
-    spells[0] = "Драгон слейв";
-    spells[1] = "Лайт страйк";
-    spells[2] = "Лагуна";
-}
+    void Create() override;
+    void GetInfo() const override;
 
 
-void Lina::Create()
-{
-    std::cout << "Введите имя Lina: ";
-    std::string inputName;
-    std::cin >> inputName;
-    SetName(inputName); 
-    SetHealth(25);
-    Npc::Create();       
-}
+    int GetIntelligence() const { return intelligence; }
+    std::string GetSpell(int index) const
+    {
+        if (index < 0 || index > 2) return "";
+        return spells[index];
+    }
 
 
-void Lina::GetInfo() const
-{
-    Npc::GetInfo();  
-    std::cout << "Интеллект: " << intelligence << std::endl;
-}
+    void SetIntelligence(int intel) { intelligence = intel; }
+    void SetSpell(int index, const std::string& spell)
+    {
+        if (index < 0 || index > 2) return;
+        spells[index] = spell;
+    }
+};
