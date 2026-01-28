@@ -9,25 +9,14 @@ private:
     int intelligence;
 
 public:
-    Lina();
+    Lina();  // Объявление конструктора
 
+    void Create() override;          // Объявление
+    void GetInfo() const override;   // Объявление
 
-    void Create() override;
-    void GetInfo() const override;
-
-
-    int GetIntelligence() const { return intelligence; }
-    std::string GetSpell(int index) const
-    {
-        if (index < 0 || index > 2) return "";
-        return spells[index];
-    }
-
-
-    void SetIntelligence(int intel) { intelligence = intel; }
-    void SetSpell(int index, const std::string& spell)
-    {
-        if (index < 0 || index > 2) return;
-        spells[index] = spell;
-    }
+    int GetIntelligence() const;     // Только объявление!
+    std::string GetSpell(int index) const;  // Только объявление!
+    
+    void SetIntelligence(int intel); // Только объявление!
+    void SetSpell(int index, const std::string& spell); // Только объявление!
 };
